@@ -91,9 +91,9 @@ class hubot::config {
 
   } else {
     exec { 'Hubot init':
-      command   => "hubot -c ${::hubot::bot_name}",
+      command   => "mkdir -p ${::hubot::bot_name}; cd ${::hubot::bot_name}; yo hubot",
       cwd       => $::hubot::root_dir,
-      path      => '/usr/bin',
+      path      => '/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin',
       unless    => "test -d ${::hubot::root_dir}/${::hubot::bot_name}",
       user      => 'hubot',
       group     => 'hubot',
