@@ -23,7 +23,7 @@ class hubot::config {
   $scripts = $::hubot::scripts
   $external_scripts = $::hubot::external_scripts
   $dependencies = $::hubot::dependencies
-  $hubotversion = $::hubot::hubot_version
+  $hubotversion = $hubot::hubot_version
   
   file { '/etc/init.d/hubot':
     ensure  => 'file',
