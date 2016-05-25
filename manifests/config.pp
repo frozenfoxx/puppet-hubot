@@ -92,10 +92,11 @@ class hubot::config {
     }
 
   } else {
-    file { "${::hubot::root_dir}/${::hubot::bot_name}/":
+    file { "${::hubot::root_dir}/${::hubot::bot_name}":
       ensure    => 'directory',
       owner     => 'hubot',
       group     => 'hubot',
+      mode      => '0750',
     }
     
     exec { 'Hubot init':
@@ -106,7 +107,7 @@ class hubot::config {
       user      => 'hubot',
       group     => 'hubot',
       logoutput => 'on_failure',
-      require   => File["${::hubot::root_dir}/${::hubot::bot_name}/"],
+      require   => File["${::hubot::root_dir}/${::hubot::bot_name}"],
     }
 
     file { "${::hubot::root_dir}/${::hubot::bot_name}/debug.sh":
