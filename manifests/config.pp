@@ -102,10 +102,17 @@ class hubot::config {
       logoutput => 'on_failure',
     }
 
+    file { "${::hubot::root_dir}/${::hubot::bot_name}/bin":
+      ensure    => 'directory',
+      owner     => 'hubot',
+      group     => 'hubot',
+      require   => Exec['Hubot init'],
+    }
+    
     file { "${::hubot::root_dir}/${::hubot::bot_name}/bin/hubot":
       ensure  => 'link',
       target  => '/usr/bin/hubot',
-      require => Exec['Hubot init'],
+      require => File["${::hubot::root_dir}/${::hubot::bot_name}/bin"],
     }
 
     file { "${::hubot::root_dir}/${::hubot::bot_name}/debug.sh":
