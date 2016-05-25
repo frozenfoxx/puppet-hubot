@@ -97,10 +97,11 @@ class hubot::config {
       owner     => 'hubot',
       group     => 'hubot',
       mode      => '0750',
+      require   => File["${::hubot::root_dir}"],
     }
-    
+
     exec { 'Hubot init':
-      command   => "yo hubot --owner=\"\" --name=\"${::hubot::bot_name}\" --description=\"A chat bot\" --adapter=shell --defaults",
+      command   => "yo hubot --defaults",
       cwd       => "${::hubot::root_dir}/${::hubot::bot_name}/",
       path      => '/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin',
       unless    => "test -d ${::hubot::root_dir}/${::hubot::bot_name}",
