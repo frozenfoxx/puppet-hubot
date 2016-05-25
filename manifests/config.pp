@@ -92,27 +92,21 @@ class hubot::config {
     }
 
   } else {
+    file { "${::hubot::root_dir}/${::hubot::bot_name}/":
+      ensure    => 'directory',
+      owner     => 'hubot',
+      group     => 'hubot',
+    }
+    
     exec { 'Hubot init':
-      command   => "mkdir -p ${::hubot::bot_name}; cd ${::hubot::bot_name}; yo hubot",
-      cwd       => $::hubot::root_dir,
+      command   => "yo hubot --owner=\"\" --name=\"${::hubot::bot_name}\" --description=\"A chat bot\" --adapter=shell --defaults",
+      cwd       => "${::hubot::root_dir}/${::hubot::bot_name}/",
       path      => '/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin',
       unless    => "test -d ${::hubot::root_dir}/${::hubot::bot_name}",
       user      => 'hubot',
       group     => 'hubot',
       logoutput => 'on_failure',
-    }
-
-    file { "${::hubot::root_dir}/${::hubot::bot_name}/bin":
-      ensure    => 'directory',
-      owner     => 'hubot',
-      group     => 'hubot',
-      require   => Exec['Hubot init'],
-    }
-    
-    file { "${::hubot::root_dir}/${::hubot::bot_name}/bin/hubot":
-      ensure  => 'link',
-      target  => '/usr/bin/hubot',
-      require => File["${::hubot::root_dir}/${::hubot::bot_name}/bin"],
+      require   => File["${::hubot::root_dir}/${::hubot::bot_name}/"],
     }
 
     file { "${::hubot::root_dir}/${::hubot::bot_name}/debug.sh":
