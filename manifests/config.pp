@@ -104,7 +104,6 @@ class hubot::config {
       command   => "yo hubot --defaults --no-insight",
       cwd       => "${::hubot::root_dir}/${::hubot::bot_name}/",
       path      => '/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin',
-      unless    => "test -d ${::hubot::root_dir}/${::hubot::bot_name}",
       user      => 'hubot',
       group     => 'hubot',
       logoutput => 'on_failure',
