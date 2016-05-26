@@ -96,9 +96,8 @@ describe 'hubot', :type => :class do
 
     context 'no git_source' do
       it { should contain_exec('Hubot init').with(
-        :command  => 'mkdir -p hubot; cd hubot; yo hubot',
-        :cwd      => '/opt/hubot',
-        :unless   => 'test -d /opt/hubot/hubot'
+        :command  => 'yo hubot --defaults --no-insight',
+        :cwd      => '/opt/hubot/hubot',
       ) }
       it { should contain_file('/opt/hubot/hubot/hubot.env')}
       it { should contain_file('/opt/hubot/hubot/hubot-scripts.json')}
@@ -120,8 +119,8 @@ describe 'hubot', :type => :class do
       context 'changing bot_name' do
         let(:params) { { :bot_name => 'foobot' } }
         it { should contain_exec('Hubot init').with(
-          :command  => 'mkdir -p foobot; cd foobot; yo hubot',
-          :unless   => 'test -d /opt/hubot/foobot'
+          :command  => 'yo hubot --defaults --no-insight',
+          :cwd      => '/opt/hubot/foobot',
         ) }
         it { should contain_file('/opt/hubot/foobot/hubot.env')}
         it { should contain_file('/opt/hubot/foobot/hubot-scripts.json')}
