@@ -6,6 +6,7 @@
 #
 # === Authors
 #
+# * Foxx Block <mailto:siliconfoxx@gmail.com>
 # * Justin Lambert <mailto:jlambert@letsevenup.com>
 #
 #
@@ -32,6 +33,18 @@ class hubot::config {
     mode    => '0555',
     content => template("hubot/${hubot::params::hubot_init}"),
     notify  => Class['hubot::service'],
+  }
+  
+  # Check for Upstart
+  if ($os['name'] == "Ubuntu" ) and ($os['release']['major'] in ["10.04", "12.04", "14.04", "14.10"]){
+    file { "hubot upstart":
+      ensure   => 'file',
+      owner    => 'root',
+      group    => 'root',
+      mode     => '0644',
+      path     => "/etc/init/hubot.conf",
+      content  => template("hubot/hubot.upstart.erb"),
+    }
   }
 
   if $::hubot::git_source {
