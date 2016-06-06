@@ -116,6 +116,7 @@ class hubot::config {
     exec { 'Hubot init':
       command   => "yo hubot --defaults --no-insight",
       cwd       => "${::hubot::root_dir}/${::hubot::bot_name}/",
+      creates   => "${::hubot::root_dir}/${::hubot::bot_name}/bin/hubot",
       path      => '/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin',
       user      => 'hubot',
       group     => 'hubot',
