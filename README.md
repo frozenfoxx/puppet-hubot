@@ -5,7 +5,7 @@ A puppet module that installs and manages a [hubot](http://hubot.github.com) bot
 
 There are two methods of configuring hubot, setting the available parameters (useful for trying it out/simple configs) and storing your config and scripts in git.  Instructions below as well on migrating from parameter config to repo configuration.
 
-Configuring via puppet
+Configuring via Puppet
 ----------------------
 
 This method is great for giving hubot a try to figure out what it's all about and maintaining a simple configuration.  If you want to be able to run hubot with only the shell adapter, no configuration is required other than including this class and then running /opt/hubot/hubot/bin/hubot (that's a lot of hubots) and interact with him on the shell.
@@ -69,7 +69,7 @@ Puppet will now keep hubot up to date based on this git repo and restart the ser
 
 Known Issues:
 -------------
-Only tested on CentOS 6, but should be pretty agnostic.  Feedback/PRs appreciated!
+Only tested on Ubuntu 14.04 but should be flexible.  Feedback/PRs appreciated!
 
 
 License:
