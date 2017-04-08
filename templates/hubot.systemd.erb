@@ -1,0 +1,17 @@
+[Unit]
+Description=hubot agent
+Requires=network-online.target
+After=network-online.target
+
+[Service]
+EnvironmentFile=<%= scope['hubot::root_dir'] %>/<%= scope['hubot::bot_name'] %>/hubot.env
+Restart=on-failure
+WorkingDirectory=<%= scope['hubot::root_dir'] %>/<%= scope['hubot::bot_name'] %>
+ExecStart=<%= scope['hubot::root_dir'] %>/<%= scope['hubot::bot_name'] %>/bin/hubot --name <%= scope['hubot::display_name'] %> --adapter <%= scope['hubot::adapter'] %> --alias <%= scope['hubot::chat_alias'] %>
+ExecReload=/bin/kill -HUP $MAINPID
+KillSignal=SIGINT
+RestartSec=10s
+User=root
+
+[Install]
+WantedBy=multi-user.target
