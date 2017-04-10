@@ -66,7 +66,7 @@ class hubot::install {
     require  => Package['hubot'],
     provider => 'npm'
   })
-  
+
   ensure_resource('package', 'generator-hubot', {
     ensure   => present,
     require  => Package['hubot'],

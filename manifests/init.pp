@@ -133,6 +133,8 @@ class hubot (
   $service_enable       = $::hubot::params::service_enable,
   $install_nodejs       = $::hubot::params::install_nodejs,
   $nodejs_manage_repo   = $::hubot::params::nodejs_manage_repo,
+  $init_style           = $::hubot::params::init_style,
+
 ) inherits hubot::params {
 
   if $log_file {
@@ -150,10 +152,25 @@ class hubot (
   }
 
   if $install_nodejs {
-    class { '::nodejs':
-      manage_package_repo => $nodejs_manage_repo,
-      before              => Package['hubot'],
+
+    case $init_style {
+      'upstart': {
+        class { '::nodejs':
+          manage_package_repo => $nodejs_manage_repo,
+          before              => Package['hubot'],
+        }
+      }
+      'systemd': {
+        class { '::nodejs':
+          manage_package_repo       => $nodejs_manage_repo,
+          nodejs_dev_package_ensure => 'present',
+          npm_package_ensure        => 'present',
+          before                    => Package['hubot'],
+        }
+      }
+      default: {}
     }
+
   }
 
   class { '::hubot::install': }

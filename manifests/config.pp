@@ -20,30 +20,46 @@ class hubot::config {
     fail("Use of private class ${name} by ${caller_module_name}")
   }
 
-  $exports = $::hubot::env_export
-  $scripts = $::hubot::scripts
+  $dependencies     = $::hubot::dependencies
+  $exports          = $::hubot::env_export
   $external_scripts = $::hubot::external_scripts
-  $dependencies = $::hubot::dependencies
-  $hubotversion = $hubot::hubot_version
-  
-  file { '/etc/init.d/hubot':
-    ensure  => 'file',
-    owner   => 'root',
-    group   => 'root',
-    mode    => '0555',
-    content => template("hubot/${hubot::params::hubot_init}"),
-    notify  => Class['hubot::service'],
-  }
-  
-  # Check for Upstart
-  if ($os['name'] == "Ubuntu" ) and ($os['release']['major'] in ["10.04", "12.04", "14.04", "14.10"]){
-    file { "hubot upstart":
-      ensure   => 'file',
-      owner    => 'root',
-      group    => 'root',
-      mode     => '0644',
-      path     => "/etc/init/hubot.conf",
-      content  => template("hubot/hubot.upstart.erb"),
+  $hubotversion     = $::hubot::hubot_version
+  $scripts          = $::hubot::scripts
+
+  case $hubot::init_style {
+    'upstart': {
+      file { '/etc/init.d/hubot':
+        ensure  => 'file',
+        owner   => 'root',
+        group   => 'root',
+        mode    => '0555',
+        content => template("hubot/${hubot::params::hubot_init}"),
+        notify  => Class['hubot::service'],
+      }
+      file { 'hubot upstart':
+        ensure  => 'file',
+        owner   => 'root',
+        group   => 'root',
+        mode    => '0644',
+        path    => '/etc/init/hubot.conf',
+        content => template('hubot/hubot.upstart.erb'),
+      }
+    }
+    'systemd': {
+      file { '/lib/systemd/system/hubot.service':
+        mode    => '0644',
+        owner   => 'root',
+        group   => 'root',
+        content => template('hubot/hubot.systemd.erb'),
+      }
+      ~> exec { 'hubot-systemd-reload':
+        command     => 'systemctl daemon-reload',
+        path        => [ '/usr/bin', '/bin', '/usr/sbin' ],
+        refreshonly => true,
+      }
+    }
+    default: {
+      fail("init_style was not specified: ${hubot::init_style}!")
     }
   }
 
@@ -91,7 +107,7 @@ class hubot::config {
       revision => 'master',
       notify   => Class['hubot::service'],
     }
-    
+
     unless empty($::hubot::env_export) {
       file { "${::hubot::root_dir}/${::hubot::bot_name}/hubot.env":
         ensure  => 'file',
@@ -106,15 +122,15 @@ class hubot::config {
 
   } else {
     file { "${::hubot::root_dir}/${::hubot::bot_name}":
-      ensure    => 'directory',
-      owner     => 'hubot',
-      group     => 'hubot',
-      mode      => '0750',
-      require   => File["${::hubot::root_dir}"],
+      ensure  => 'directory',
+      owner   => 'hubot',
+      group   => 'hubot',
+      mode    => '0750',
+      require => File[$::hubot::root_dir],
     }
 
     exec { 'Hubot init':
-      command   => "yo hubot --defaults --no-insight",
+      command   => 'yo hubot --defaults --no-insight',
       cwd       => "${::hubot::root_dir}/${::hubot::bot_name}/",
       creates   => "${::hubot::root_dir}/${::hubot::bot_name}/bin/hubot",
       path      => '/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin',
