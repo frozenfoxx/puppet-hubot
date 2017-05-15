@@ -11,7 +11,7 @@ ExecStart=<%= scope['hubot::root_dir'] %>/<%= scope['hubot::bot_name'] %>/bin/hu
 ExecReload=/bin/kill -HUP $MAINPID
 KillSignal=SIGINT
 RestartSec=10s
-User=root
+User=hubot
 
 [Install]
 WantedBy=multi-user.target
