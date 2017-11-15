@@ -24,6 +24,7 @@ class hubot::service {
     enable     => $::hubot::service_enable_real,
     hasstatus  => true,
     hasrestart => true,
+    provider   => $::hubot::init_style,
     require    => Class['hubot::config'],
   }
 
