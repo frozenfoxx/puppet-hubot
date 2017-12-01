@@ -21,7 +21,7 @@ class hubot::params {
   $chat_alias           = '/'
   $build_deps           = []
   $env_export           = {}
-  $env_file_show_diff   = $false
+  $env_file_show_diff   = false
   $scripts              = []
   $external_scripts     = []
   $log_file             = undef
