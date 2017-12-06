@@ -33,6 +33,11 @@
 #     that should be exported for this bot
 #   Default: {}
 #
+# [*env_file_show_diff*]
+#   Boolean.  Enable showing diff of hubot environment variable file.  Setting this to true could expose
+#     secrets that might be getting assigned to environment variables for hubot.
+#   Default: false
+#
 # [*scripts*]
 #   Array of Strings. Used when not using git_source.  List of scripts to be
 #     included from hubot-scripts
@@ -120,6 +125,7 @@ class hubot (
   $chat_alias           = $::hubot::params::chat_alias,
   $build_deps           = $::hubot::params::build_deps,
   $env_export           = $::hubot::params::env_export,
+  $env_file_show_diff   = $::hubot::params::env_file_show_diff,
   $scripts              = $::hubot::params::scripts,
   $external_scripts     = $::hubot::params::external_scripts,
   $log_file             = $::hubot::params::log_file,

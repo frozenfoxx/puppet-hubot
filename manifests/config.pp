@@ -110,13 +110,14 @@ class hubot::config {
 
     unless empty($::hubot::env_export) {
       file { "${::hubot::root_dir}/${::hubot::bot_name}/hubot.env":
-        ensure  => 'file',
-        owner   => 'hubot',
-        group   => 'hubot',
-        mode    => '0440',
-        content => template('hubot/hubot.env.erb'),
-        notify  => Class['hubot::service'],
-        require => Vcsrepo["${::hubot::root_dir}/${::hubot::bot_name}"],
+        ensure    => 'file',
+        owner     => 'hubot',
+        group     => 'hubot',
+        mode      => '0440',
+        show_diff => $::hubot::env_file_show_diff,
+        content   => template('hubot/hubot.env.erb'),
+        notify    => Class['hubot::service'],
+        require   => Vcsrepo["${::hubot::root_dir}/${::hubot::bot_name}"],
       }
     }
 
