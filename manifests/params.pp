@@ -36,7 +36,12 @@ class hubot::params {
 
   case $::operatingsystem {
     /Ubuntu|Debian/: {
-      $init_style         = 'upstart'
+      if versioncmp($::operatingsystemrelease, '7.0') > 0 {
+        $init_style         = 'systemd'
+      }
+      else {
+        $init_style         = 'upstart'
+        }
       $hubot_init         = "hubot.init.${::operatingsystem}.erb"
       $nodejs_manage_repo = true
     }
