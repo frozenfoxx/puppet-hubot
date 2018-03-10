@@ -185,7 +185,7 @@ class hubot::config {
       owner   => 'hubot',
       group   => 'hubot',
       mode    => '0444',
-      content => template('hubot/package.json.erb'),
+      source => "puppet:///modules/${module_name}/package.json",
       notify  => Class['hubot::service'],
       require => Exec['Hubot init'],
     }
